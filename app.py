@@ -75,12 +75,13 @@ def get_wikipedia_summary(search_term, sentences=3):
 custom_css = """
 <style>
 body {
-    background-color: #f9f9f9; /* Light gray background */
+    background: linear-gradient(45deg, #FF5733, #FFC300); /* Gradient background */
+    color: #FFFFFF; /* White text color */
 }
 
 .stButton>button {
-    background-color: #4CAF50; /* Green background for buttons */
-    color: white;
+    background-color: #1E8449; /* Dark green background for buttons */
+    color: #FFFFFF; /* White text color */
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -90,14 +91,15 @@ body {
     cursor: pointer;
     border-radius: 8px;
     border: none;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
 }
 
 .stButton>button:hover {
-    background-color: #45a049; /* Darker green background on hover */
+    background-color: #186A3B; /* Darker green background on hover */
 }
 
 .stTextInput>div>div>input {
-    background-color: #f2f2f2; /* Light gray background for text input */
+    background-color: rgba(255, 255, 255, 0.8); /* Transparent white background for text input */
     color: #333333; /* Dark text color */
     border-radius: 8px;
     border: 1px solid #ccc; /* Light gray border */
@@ -106,7 +108,7 @@ body {
 }
 
 .stMarkdown {
-    color: #333333; /* Dark text color for markdown text */
+    color: #FFFFFF; /* White text color for markdown text */
 }
 
 .stImage>img {
@@ -115,11 +117,16 @@ body {
 }
 
 .stText>div>div>div>span {
-    color: #333333; /* Dark text color for form labels */
+    color: #FFFFFF; /* White text color for form labels */
 }
 
 .stMarkdown a {
-    color: #4CAF50; /* Green color for links */
+    color: #FFC300; /* Yellow color for links */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.stMarkdown a:hover {
+    color: #FFD700; /* Brighter yellow color on hover */
 }
 </style>
 """
@@ -154,5 +161,6 @@ if st.session_state.get('model'):
                     st.markdown(f"**Wikipedia Summary for {result[0]}**: {answer}")
             else:
                 st.error("Please upload a file first.")
+
 
 
