@@ -23,7 +23,7 @@ def get_wikipedia_summary(search_term, sentences=3):
 
 
 
-st.title('Dog Breed Classifier')
+st.title('SniffAI')
 st.write(":robot_face: Upload a dog image and find out the breed :sparkles:")
 
 load = st.button("Load model")
