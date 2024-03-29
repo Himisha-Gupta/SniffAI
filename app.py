@@ -71,6 +71,59 @@ def get_wikipedia_summary(search_term, sentences=3):
     except wikipedia.exceptions.DisambiguationError as e:
         return f"Multiple pages found: {e.options}"
 
+# Custom CSS styles
+custom_css = """
+<style>
+body {
+    background-color: #f9f9f9; /* Light gray background */
+}
+
+.stButton>button {
+    background-color: #4CAF50; /* Green background for buttons */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+}
+
+.stButton>button:hover {
+    background-color: #45a049; /* Darker green background on hover */
+}
+
+.stTextInput>div>div>input {
+    background-color: #f2f2f2; /* Light gray background for text input */
+    color: #333333; /* Dark text color */
+    border-radius: 8px;
+    border: 1px solid #ccc; /* Light gray border */
+    padding: 10px;
+    font-size: 16px;
+}
+
+.stMarkdown {
+    color: #333333; /* Dark text color for markdown text */
+}
+
+.stImage>img {
+    border-radius: 8px; /* Rounded corners for images */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Box shadow for images */
+}
+
+.stText>div>div>div>span {
+    color: #333333; /* Dark text color for form labels */
+}
+
+.stMarkdown a {
+    color: #4CAF50; /* Green color for links */
+}
+</style>
+"""
+
 # Set page title and description
 st.title('🐾 SniffAI 🤖')
 st.markdown("*Upload a picture of your dog and find out its breed!*")
@@ -83,6 +136,7 @@ if 'model' not in st.session_state:
 
 # Display prediction form
 if st.session_state.get('model'):
+    st.markdown(custom_css, unsafe_allow_html=True)  # Apply custom CSS styles
     with st.form(key='predict_form'):
         st.header("Predict Dog Breed")
         input_dog_file = st.file_uploader("Upload a picture of your dog", type=["jpg", "png", "jpeg"])
