@@ -76,6 +76,29 @@ st.title('🐾 SniffAI 🤖')
 st.markdown("*Upload a picture of your dog and find out its breed!*")
 
 # Load model button
-load = st.button("Loa
+load = st.button("Load model")
+if 'model' not in st.session_state:
+    st.session_state['model'] = load_model()
+    st.success("Model loaded!")
+
+# Display prediction form
+if st.session_state.get('model'):
+    with st.form(key='predict_form'):
+        st.header("Predict Dog Breed")
+        input_dog_file = st.file_uploader("Upload a picture of your dog", type=["jpg", "png", "jpeg"])
+        submit_button = st.form_submit_button("Predict")
+
+        if submit_button:
+            if input_dog_file is not None:
+                with st.spinner('Predicting...'):
+                    file_path = save_uploaded_file(input_dog_file)
+                    result = predict(st.session_state['model'], file_path)
+                    answer = get_wikipedia_summary(result[0])
+                    st.success(f"Predicted Breed: {result[0]}")
+                    st.image(file_path, caption='Uploaded Image', use_column_width=True)
+                    st.markdown("---")
+                    st.markdown(f"**Wikipedia Summary for {result[0]}**: {answer}")
+            else:
+                st.error("Please upload a file first.")
 
 
