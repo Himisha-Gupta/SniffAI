@@ -27,7 +27,7 @@ body {
 """, unsafe_allow_html=True)
 
 st.title('SniffAI 🐾')
-st.subheader('A simple app to predict dog breeds using machine learning')
+st.subheader('A App to predict the dog breed!')
 st.write("Upload a dog image and find out the breed. 🚀")
 
 load = st.button("Load Model")
