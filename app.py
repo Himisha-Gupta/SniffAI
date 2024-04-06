@@ -33,8 +33,23 @@ if 'model' not in st.session_state:
 # Prediction Form
 if st.session_state.get('model'):
     st.subheader("Prediction Form")
-    with st.form(key='predict_form')
+    with st.form(key='predict_form'):
+        st.write("Upload a picture of your dog:")
+        input_dog_file = st.file_uploader("", type=["jpg", "png", "jpeg"], help="Accepted formats: JPG, PNG, JPEG")
 
+        if input_dog_file is not None:
+            submit_button = st.form_submit_button("Predict")
+
+            if submit_button:
+                with st.spinner('Predicting...'):
+                    file_path = save_uploaded_file(input_dog_file)
+                    result = predict(st.session_state['model'], file_path)
+                    answer = get_wikipedia_summary(result[0])
+                st.success(f"Predicted Breed: {result[0]}")
+                st.write(f"*{answer}*")
+                st.image(file_path, caption='Uploaded Image', use_column_width=True)
+        else:
+            st.error("Please upload an image.")
 
 
 
