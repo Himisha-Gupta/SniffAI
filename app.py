@@ -1,18 +1,15 @@
-
 import streamlit as st
 import tempfile
 from prediction import load_model, predict
 import wikipedia
 
-
+# Function to save uploaded file
 def save_uploaded_file(uploaded_file):
-    # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix="." + uploaded_file.name.split('.')[-1]) as tmp_file:
-        # Write the uploaded file's contents to the temporary file
         tmp_file.write(uploaded_file.getbuffer())
-        return tmp_file.name  # Return the path of the saved file
+        return tmp_file.name
 
-
+# Function to get Wikipedia summary
 def get_wikipedia_summary(search_term, sentences=3):
     try:
         summary = wikipedia.summary(search_term, sentences=sentences)
@@ -22,30 +19,37 @@ def get_wikipedia_summary(search_term, sentences=3):
     except wikipedia.exceptions.DisambiguationError as e:
         return f"Multiple pages found: {e.options}"
 
-
-
+# Page Title and Description
 st.title('🐾 SniffAI 🤖')
-st.write(":robot_face: Upload a dog image and find out the breed :sparkles:")
+st.markdown("*Upload a picture of your dog and discover its breed!*")
 
-load = st.button("Load model")
+# Load model button
+load = st.button("Load Model")
 if 'model' not in st.session_state:
     st.session_state['model'] = load_model()
-    st.write("Model loaded!")
+    if st.session_state['model']:
+        st.success("Model loaded successfully!")
 
-if st.session_state['model']:
-    with st.form(key='prexdict_form'):
-        input_dog_file = st.file_uploader("Upload a picture of your dog here.", type=["jpg", "png", "jpeg"])
-        submit_button = st.form_submit_button("Predict Dog")
+# Prediction Form
+if st.session_state.get('model'):
+    st.subheader("Prediction Form")
+    with st.form(key='predict_form'):
+        st.write("Upload a picture of your dog:")
+        input_dog_file = st.file_uploader("", type=["jpg", "png", "jpeg"], help="Accepted formats: JPG, PNG, JPEG")
 
-        if submit_button:
-            if input_dog_file is not None:
+        if input_dog_file is not None:
+            submit_button = st.form_submit_button("Predict")
+
+            if submit_button:
                 with st.spinner('Predicting...'):
-                    print(input_dog_file)
                     file_path = save_uploaded_file(input_dog_file)
-                    # st.write(f"The file is temporarily saved at: {file_path}")
                     result = predict(st.session_state['model'], file_path)
-                answer = get_wikipedia_summary(result[0])
-                st.success(f"{result[0]} : {answer}")
-                st.image(file_path)
-            else:
-                st.error("Please upload a file first.")
+                    answer = get_wikipedia_summary(result[0])
+                st.success(f"Predicted Breed: {result[0]}")
+                st.write(f"*{answer}*")
+                st.image(file_path, caption='Uploaded Image', use_column_width=True)
+        else:
+            st.error("Please upload an image.")
+
+
+
