@@ -21,7 +21,7 @@ def get_wikipedia_summary(search_term, sentences=3):
 st.markdown("""
 <style>
 body {
-    background-color: #f5f5f5;
+    background-color: ##FFC0CB;
 }
 </style>
 """, unsafe_allow_html=True)
