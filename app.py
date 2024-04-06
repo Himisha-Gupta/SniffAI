@@ -17,6 +17,15 @@ def get_wikipedia_summary(search_term, sentences=3):
     except wikipedia.exceptions.DisambiguationError as e:
         return f"Multiple pages found: {e.options}"
 
+# Add CSS style to change the background color
+st.markdown("""
+<style>
+body {
+    background-color: #f5f5f5;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title('SniffAI 🐾')
 st.subheader('A simple app to predict dog breeds using machine learning')
 st.write("Upload a dog image and find out the breed. 🚀")
