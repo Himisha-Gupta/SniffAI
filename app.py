@@ -27,7 +27,7 @@ body {
 """, unsafe_allow_html=True)
 
 st.title('SniffAI 🐶🐾')
-st.subheader('Identify your furry friend's breed with ease!')
+st.subheader("Identify your furry friend's breed with ease!")
 st.write("Upload a dog image and find out the breed. 🚀")
 
 load = st.button("Load Model")
