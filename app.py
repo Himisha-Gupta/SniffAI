@@ -3,10 +3,14 @@ import tempfile
 from prediction import load_model, predict
 import wikipedia
 
+
 def save_uploaded_file(uploaded_file):
+    # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False, suffix="." + uploaded_file.name.split('.')[-1]) as tmp_file:
+        # Write the uploaded file's contents to the temporary file
         tmp_file.write(uploaded_file.getbuffer())
-        return tmp_file.name
+        return tmp_file.name  # Return the path of the saved file
+
 
 def get_wikipedia_summary(search_term, sentences=3):
     try:
@@ -17,37 +21,30 @@ def get_wikipedia_summary(search_term, sentences=3):
     except wikipedia.exceptions.DisambiguationError as e:
         return f"Multiple pages found: {e.options}"
 
-# Add CSS style to change the background color
-st.markdown("""
-<style>
-body {
-    background-color: ##FFC0CB;
-}
-</style>
-""", unsafe_allow_html=True)
 
-st.title('SniffAI 🐾')
-st.subheader('A App to predict the dog breed!')
-st.write("Upload a dog image and find out the breed. 🚀")
 
-load = st.button("Load Model")
+st.title('🐾 SniffAI 🤖')
+st.write(":robot_face: Upload a dog image and find out the breed :sparkles:")
+
+load = st.button("Load model")
 if 'model' not in st.session_state:
     st.session_state['model'] = load_model()
     st.write("Model loaded!")
 
 if st.session_state['model']:
     with st.form(key='prexdict_form'):
-        st.subheader('Upload your dog image')
-        input_dog_file = st.file_uploader("", type=["jpg", "png", "jpeg"], accept_multiple_files=False)
-        submit_button = st.form_submit_button("Predict Dog Breed")
+        input_dog_file = st.file_uploader("Upload a picture of your dog here.", type=["jpg", "png", "jpeg"])
+        submit_button = st.form_submit_button("Predict Dog")
 
-        if input_dog_file is not None:
-            with st.spinner('Predicting...'):
-                file_path = save_uploaded_file(input_dog_file)
-                result = predict(st.session_state['model'], file_path)
-            answer = get_wikipedia_summary(result[0])
-            st.success(f"The predicted breed is: {result[0]}")
-            st.write(f"{answer}")
-            st.image(file_path, caption=f"Predicted breed: {result[0]}", use_column_width=True)
-        else:
-            st.error("Please upload a file first.")
+        if submit_button:
+            if input_dog_file is not None:
+                with st.spinner('Predicting...'):
+                    print(input_dog_file)
+                    file_path = save_uploaded_file(input_dog_file)
+                    # st.write(f"The file is temporarily saved at: {file_path}")
+                    result = predict(st.session_state['model'], file_path)
+                answer = get_wikipedia_summary(result[0])
+                st.success(f"{result[0]} : {answer}")
+                st.image(file_path)
+            else:
+                st.error("Please upload a file first.")
