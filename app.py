@@ -1,8 +1,39 @@
+
 import streamlit as st
 import tempfile
 from prediction import load_model, predict
 import wikipedia
 
+# Add CSS styles
+st.markdown("""
+    <style>
+        .title {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .upload-section {
+            margin-bottom: 30px;
+        }
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .spinner-text {
+            color: #007bff;
+            font-size: 18px;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 def save_uploaded_file(uploaded_file):
     # Create a temporary file
@@ -10,7 +41,6 @@ def save_uploaded_file(uploaded_file):
         # Write the uploaded file's contents to the temporary file
         tmp_file.write(uploaded_file.getbuffer())
         return tmp_file.name  # Return the path of the saved file
-
 
 def get_wikipedia_summary(search_term, sentences=3):
     try:
@@ -21,10 +51,8 @@ def get_wikipedia_summary(search_term, sentences=3):
     except wikipedia.exceptions.DisambiguationError as e:
         return f"Multiple pages found: {e.options}"
 
-
-
 st.title('🐾 SniffAI 🤖')
-st.write(":robot_face: Upload a dog image and find out the breed :sparkles:")
+st.markdown("<p class='title'>Upload a dog image and find out the breed</p>", unsafe_allow_html=True)
 
 load = st.button("Load model")
 if 'model' not in st.session_state:
@@ -33,7 +61,9 @@ if 'model' not in st.session_state:
 
 if st.session_state['model']:
     with st.form(key='prexdict_form'):
+        st.markdown("<div class='upload-section'>", unsafe_allow_html=True)
         input_dog_file = st.file_uploader("Upload a picture of your dog here.", type=["jpg", "png", "jpeg"])
+        st.markdown("</div>", unsafe_allow_html=True)
         submit_button = st.form_submit_button("Predict Dog")
 
         if submit_button:
